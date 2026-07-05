@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sơ Đồ Lớp Học - Nút Gọi Nổi Bật</title>
+    <title>Sơ Đồ Phân Tầng Lớp Học - 20 Lớp Link</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -177,7 +178,18 @@
             font-weight: bold;
         }
         .card-time { font-size: 11px; color: #3b82f6; font-weight: bold; margin-bottom: 4px; }
-        .card-title { font-size: 15px; color: #f8fafc; font-weight: bold; margin-bottom: 6px; padding-right: 25px; }
+        
+        /* TÊN LỚP THÀNH LINK BẤM CHUẨN MOBILE */
+        .card-title-link { 
+            font-size: 16px; 
+            color: #60a5fa;
+            font-weight: bold; 
+            margin-bottom: 8px; 
+            padding-right: 25px;
+            display: inline-block;
+            text-decoration: underline;
+        }
+        .card-title-link:hover { color: #93c5fd; }
         
         .card-info { 
             font-size: 12px; 
@@ -188,13 +200,12 @@
             gap: 6px; 
         }
 
-        /* THIẾT KẾ NÚT GỌI RÕ RÀNG NỔI BẬT */
         .btn-call-prominent { 
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            background-color: #059669; /* Xanh lá đậm nổi bật */
+            background-color: #059669;
             color: white !important;
             text-decoration: none;
             font-weight: bold;
@@ -202,12 +213,8 @@
             padding: 8px 14px;
             border-radius: 6px;
             box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
-            transition: background 0.2s;
             width: fit-content;
             margin-top: 2px;
-        }
-        .btn-call-prominent:hover {
-            background-color: #10b981;
         }
         
         .card-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
@@ -293,18 +300,44 @@
     <div class="content-container" id="building-container"></div>
 
     <script>
+        // MẢNG GIÁO VIÊN
         const danhSachGiaoVien = [
             { name: "Nguyễn Văn Anh", phone: "0901234567" },
             { name: "Trần Thị Bình", phone: "0911222333" },
             { name: "Lê Hoàng Cường", phone: "0988777666" }
         ];
-        const danhSachLop = ["Lớp Tiếng Anh Giao Tiếp A1", "Lớp Toán Tư Duy B3", "Lớp Lập Trình Python C2"];
-        const danhSachPhong = ["Phòng 01", "Phòng 02", "Phòng 03", "Phòng 04"];
+
+        // KHAI BÁO ĐỦ 20 LỚP VÀ 20 LINK Ở ĐÂY
+        const danhSachLop = [
+            { name: "Lớp 01: Tiếng Anh Giao Tiếp A1", link: "https://zalo.me" },
+            { name: "Lớp 02: Toán Tư Duy B3", link: "https://zoom.us" },
+            { name: "Lớp 03: Lập Trình Python C2", link: "https://google.com" },
+            { name: "Lớp 04: Vật Lý Đại Cương", link: "https://facebook.com" },
+            { name: "Lớp 05: Hóa Học Hữu Cơ", link: "https://youtube.com" },
+            { name: "Lớp 06: Ngữ Văn Khối 12", link: "https://zalo.me" },
+            { name: "Lớp 07: Lịch Sử Việt Nam", link: "https://zoom.us" },
+            { name: "Lớp 08: Địa Lý Tự Nhiên", link: "https://google.com" },
+            { name: "Lớp 09: Sinh Học Tế Bào", link: "https://zalo.me" },
+            { name: "Lớp 10: Tin Học Văn Phòng", link: "https://zoom.us" },
+            { name: "Lớp 11: Tiếng Trung Cơ Bản", link: "https://google.com" },
+            { name: "Lớp 12: Tiếng Nhật N5", link: "https://zalo.me" },
+            { name: "Lớp 13: Tiếng Hàn Sơ Cấp", link: "https://zoom.us" },
+            { name: "Lớp 14: Kỹ Năng Mềm A2", link: "https://google.com" },
+            { name: "Lớp 15: Tư Duy Phản Biện", link: "https://zalo.me" },
+            { name: "Lớp 16: Luyện Chữ Đẹp", link: "https://zoom.us" },
+            { name: "Lớp 17: Vẽ Mỹ Thuật K1", link: "https://google.com" },
+            { name: "Lớp 18: Nhạc Cụ Ghi-ta", link: "https://zalo.me" },
+            { name: "Lớp 19: Lớp Kịch Nghệ Thuật", link: "https://zoom.us" },
+            { name: "Lớp 20: Kế Toán Doanh Nghiệp", link: "https://google.com" }
+        ];
+
+        // 10 Phòng học mẫu
+        const danhSachPhong = ["Phòng 01", "Phòng 02", "Phòng 03", "Phòng 04", "Phòng 05", "Phòng 06", "Phòng 07", "Phòng 08", "Phòng 09", "Phòng 10"];
         
         const cauTrucToaNha = { "A": 2, "B": 3, "C": 4, "D": 6 };
 
         const defaultSchedule = { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] };
-        let lichHocToanTruong = JSON.parse(localStorage.getItem('lichHocTang_V3')) || defaultSchedule;
+        let lichHocToanTruong = JSON.parse(localStorage.getItem('lichHocTang_V4')) || defaultSchedule;
         let currentDay = 'thu2';
 
         function updateFloorDropdown() {
@@ -321,9 +354,17 @@
             const teacherSelect = document.getElementById('select-teacher');
             const roomSelect = document.getElementById('select-room');
 
-            danhSachLop.forEach(lop => classSelect.innerHTML += `<option value="${lop}">${lop}</option>`);
-            danhSachGiaoVien.forEach(gv => teacherSelect.innerHTML += `<option value="${gv.name}" data-phone="${gv.phone}">${gv.name}</option>`);
-            danhSachPhong.forEach(phong => roomSelect.innerHTML += `<option value="${phong}">${phong}</option>`);
+            danhSachLop.forEach((lop, index) => { 
+                classSelect.innerHTML += `<option value="${index}">${lop.name}</option>`; 
+            });
+            
+            danhSachGiaoVien.forEach(gv => {
+                teacherSelect.innerHTML += `<option value="${gv.name}" data-phone="${gv.phone}">${gv.name}</option>`;
+            });
+            
+            danhSachPhong.forEach(phong => { 
+                roomSelect.innerHTML += `<option value="${phong}">${phong}</option>`; 
+            });
             updateFloorDropdown();
         }
 
@@ -360,7 +401,9 @@
                                 <div class="class-card">
                                     <button class="btn-delete" onclick="deleteCard('${day}', ${originIndex})">✕</button>
                                     <div class="card-time">⏱ Ca: ${item.time}</div>
-                                    <div class="card-title">${item.lopName}</div>
+                                    
+                                    <a href="${item.lopLink}" target="_blank" class="card-title-link">${item.lopName}</a>
+                                    
                                     <div class="card-info">
                                         <span>👤 GV: ${item.gvName}</span>
                                         <a href="tel:${item.gvPhone}" class="btn-call-prominent">📞 Gọi ngay: ${phoneDisplay}</a>
@@ -385,7 +428,11 @@
         function addSchedule() {
             const targetDay = document.getElementById('select-day').value;
             const time = document.getElementById('select-time').value;
-            const lopName = document.getElementById('select-class').value;
+            
+            const lopIndex = document.getElementById('select-class').value;
+            const lopName = danhSachLop[lopIndex].name;
+            const lopLink = danhSachLop[lopIndex].link;
+            
             const studentSize = document.getElementById('input-size').value || "0";
             
             const teacherSelect = document.getElementById('select-teacher');
@@ -396,9 +443,9 @@
             const floor = document.getElementById('select-floor').value;
             const phongName = document.getElementById('select-room').value;
 
-            lichHocToanTruong[targetDay].push({ time, lopName, studentSize, gvName, gvPhone, building, floor, phongName });
+            lichHocToanTruong[targetDay].push({ time, lopName, lopLink, studentSize, gvName, gvPhone, building, floor, phongName });
 
-            localStorage.setItem('lichHocTang_V3', JSON.stringify(lichHocToanTruong));
+            localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
             renderBuildingMap(currentDay);
             alert("Đã xếp lịch thành công!");
         }
@@ -406,7 +453,7 @@
         function deleteCard(day, index) {
             if (confirm("Bạn muốn xóa lớp học này?")) {
                 lichHocToanTruong[day].splice(index, 1);
-                localStorage.setItem('lichHocTang_V3', JSON.stringify(lichHocToanTruong));
+                localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
                 renderBuildingMap(day);
             }
         }
@@ -425,4 +472,4 @@
     </script>
 </body>
     </html>
-    
+        

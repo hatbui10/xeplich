@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sơ Đồ Phân Tầng Lớp Học - 20 Lớp Link</title>
+    <title>Sơ Đồ Phân Tầng Lớp Học - Hệ Thống Quản Lý</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -76,6 +75,19 @@
             width: 100%;
         }
         .btn-submit:hover { background-color: #2563eb; }
+        
+        .btn-clear-day {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            width: 100%;
+        }
+        .btn-clear-day:hover { background-color: #dc2626; }
 
         /* THANH CHỌN THỨ */
         .tabs {
@@ -102,7 +114,7 @@
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
         }
 
-        /* KHU VỰC HIỂN THỊ SƠ ĐỒ TOÀ NHÀ */
+        /* KHU VỰC SƠ ĐỒ TOÀ NHÀ */
         .content-container {
             max-width: 1300px;
             margin: 0 auto;
@@ -128,10 +140,10 @@
             gap: 10px;
         }
         .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-        .dot-A { background-color: #ef4444; }
-        .dot-B { background-color: #fbbf24; }
-        .dot-C { background-color: #10b981; }
-        .dot-D { background-color: #a78bfa; }
+        .dot-30 { background-color: #ef4444; }
+        .dot-58 { background-color: #fbbf24; }
+        .dot-158 { background-color: #10b981; }
+        .dot-237 { background-color: #a78bfa; }
 
         .floor-row {
             display: flex;
@@ -156,7 +168,7 @@
             width: 100%;
         }
 
-        /* THỂ LỚP HỌC */
+        /* THẺ LỚP HỌC TRONG TẦNG */
         .class-card {
             background: #0f172a;
             border-radius: 8px;
@@ -165,61 +177,82 @@
             position: relative;
             box-sizing: border-box;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         .btn-delete {
             position: absolute;
-            top: 12px;
+            top: 10px;
             right: 12px;
-            background: none;
-            border: none;
+            background: #273549;
+            border: 1px solid #475569;
             color: #ef4444;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
+            border-radius: 4px;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
         }
-        .card-time { font-size: 11px; color: #3b82f6; font-weight: bold; margin-bottom: 4px; }
-        
-        /* TÊN LỚP THÀNH LINK BẤM CHUẨN MOBILE */
-        .card-title-link { 
-            font-size: 16px; 
-            color: #60a5fa;
-            font-weight: bold; 
-            margin-bottom: 8px; 
-            padding-right: 25px;
-            display: inline-block;
-            text-decoration: underline;
-        }
-        .card-title-link:hover { color: #93c5fd; }
-        
-        .card-info { 
-            font-size: 12px; 
-            color: #94a3b8; 
-            margin-bottom: 8px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 6px; 
+        .btn-delete:hover {
+            background-color: #ef4444;
+            color: white;
+            border-color: #ef4444;
         }
 
+        /* DÒNG 1: CA HỌC VÀ SĨ SỐ */
+        .card-row-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 25px; /* Tránh đè lên nút Xóa */
+        }
+        .card-time { font-size: 11px; color: #3b82f6; font-weight: bold; }
+        .badge-student { font-size: 11px; color: #e2e8f0; background: #334155; padding: 2px 6px; border-radius: 4px; }
+        
+        /* DÒNG 2: TÊN LỚP HỌC */
+        .card-title-link { 
+            font-size: 16px; 
+            color: #f8fafc; 
+            font-weight: bold; 
+            text-decoration: underline;
+            cursor: pointer;
+            width: fit-content;
+        }
+        .card-title-link:hover { color: #3b82f6; }
+        
+        /* DÒNG 3: GIÁO VIÊN VÀ NÚT GỌI */
+        .teacher-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #94a3b8;
+        }
         .btn-call-prominent { 
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
             background-color: #059669;
             color: white !important;
             text-decoration: none;
             font-weight: bold;
-            font-size: 13px;
-            padding: 8px 14px;
-            border-radius: 6px;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
             box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
-            width: fit-content;
-            margin-top: 2px;
+            white-space: nowrap;
         }
-        
-        .card-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .badge-room { font-size: 11px; color: #06b6d4; background: rgba(6, 182, 212, 0.1); padding: 4px 8px; border-radius: 4px; font-weight: bold; border: 1px solid rgba(6, 182, 212, 0.2); }
-        .badge-student { font-size: 11px; color: #e2e8f0; background: #334155; padding: 4px 8px; border-radius: 4px; }
+        .btn-call-prominent:hover { background-color: #047857; }
         
         .empty-floor { color: #475569; font-style: italic; font-size: 12px; }
 
@@ -228,12 +261,14 @@
             h2 { font-size: 24px; }
             .floor-row { flex-direction: row; align-items: center; gap: 0; }
             .floor-label { width: 100px; flex-shrink: 0; }
-            .floor-classes { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+            .floor-classes { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
             .tab-btn { padding: 12px 24px; font-size: 15px; border-radius: 8px; }
         }
     </style>
 </head>
 <body>
+
+    <hr style="border: 1px solid #334155; max-width: 1300px; margin: 10px auto;">
 
     <h2>SƠ ĐỒ PHÂN TẦNG LỚP HỌC</h2>
 
@@ -251,38 +286,52 @@
                 <label>Ca Học</label>
                 <select id="select-time">
                     <option value="18h00 - 19h30">Ca 18h00 - 19h30</option>
-                    <option value="19h45 - 21h15">Ca 19h45 - 21h15</option>
-                    <option value="08h00 - 09h30">Ca 08h00 - 09h30</option>
+                    <option value="18h15 - 19h45">Ca 18h15 - 19h45</option>
+                    <option value="18h30 - 20h00">Ca 18h30 - 20h00</option>
+                    <option value="18h45 - 20h15">Ca 18h45 - 20h15</option>
+                    <option value="20h00 - 21h30">Ca 20h00 - 21h30</option>
                 </select>
-            </div>
-            <div class="form-group">
-                <label>Lớp Học</label>
-                <select id="select-class"></select>
             </div>
             <div class="form-group">
                 <label>Sĩ số lớp</label>
                 <input type="number" id="input-size" min="1" value="30">
             </div>
             <div class="form-group">
+                <label>Lớp Học</label>
+                <select id="select-class"></select>
+            </div>
+
+            <div class="form-group">
                 <label>Giáo Viên</label>
                 <select id="select-teacher"></select>
             </div>
             <div class="form-group">
-                <label>Toà Nhà</label>
-                <select id="select-building" onchange="updateFloorDropdown()">
-                    <option value="A">Toà A</option><option value="B">Toà B</option><option value="C">Toà C</option><option value="D">Toà D</option>
+                <label>Toà Nhà / Phòng</label>
+                <select id="select-building">
+                    <option value="T1-30">T1-30</option>
+                    <option value="T2-30">T2-30</option>
+                    <option value="T3-30">T3-30</option>
+                    <option value="T1-158">T1-158</option>
+                    <option value="T2-58">T2-58</option>
+                    <option value="T3-58">T3-58</option>
+                    <option value="T2-158">T2-158</option>
+                    <option value="T3-158">T3-158</option>
+                    <option value="T4-158">T4-158</option>
+                    <option value="T2-237">T2-237</option>
+                    <option value="T3-237">T3-237</option>
+                    <option value="T4-237">T4-237</option>
+                    <option value="T5-237">T5-237</option>
+                    <option value="T6-237">T6-237</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Tầng</label>
-                <select id="select-floor"></select>
-            </div>
-            <div class="form-group">
-                <label>Số Phòng</label>
-                <select id="select-room"></select>
-            </div>
-            <div class="form-group">
-                <button class="btn-submit" onclick="addSchedule()">➕ Xếp Lịch</button>
+            
+            <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 5px; width: 100%; padding: 0; margin: 0;">
+                <div class="form-group">
+                    <button class="btn-submit" onclick="addSchedule()">➕ Xếp Lịch</button>
+                </div>
+                <div class="form-group">
+                    <button class="btn-clear-day" onclick="clearCurrentDaySchedule()">🗑 Xóa Ngày</button>
+                </div>
             </div>
         </div>
     </div>
@@ -307,65 +356,90 @@
             { name: "Lê Hoàng Cường", phone: "0988777666" }
         ];
 
-        // KHAI BÁO ĐỦ 20 LỚP VÀ 20 LINK Ở ĐÂY
+        // DANH SÁCH LỚP HỌC
         const danhSachLop = [
-            { name: "Lớp 01: Tiếng Anh Giao Tiếp A1", link: "https://zalo.me" },
-            { name: "Lớp 02: Toán Tư Duy B3", link: "https://zoom.us" },
-            { name: "Lớp 03: Lập Trình Python C2", link: "https://google.com" },
-            { name: "Lớp 04: Vật Lý Đại Cương", link: "https://facebook.com" },
-            { name: "Lớp 05: Hóa Học Hữu Cơ", link: "https://youtube.com" },
-            { name: "Lớp 06: Ngữ Văn Khối 12", link: "https://zalo.me" },
-            { name: "Lớp 07: Lịch Sử Việt Nam", link: "https://zoom.us" },
-            { name: "Lớp 08: Địa Lý Tự Nhiên", link: "https://google.com" },
-            { name: "Lớp 09: Sinh Học Tế Bào", link: "https://zalo.me" },
-            { name: "Lớp 10: Tin Học Văn Phòng", link: "https://zoom.us" },
-            { name: "Lớp 11: Tiếng Trung Cơ Bản", link: "https://google.com" },
-            { name: "Lớp 12: Tiếng Nhật N5", link: "https://zalo.me" },
-            { name: "Lớp 13: Tiếng Hàn Sơ Cấp", link: "https://zoom.us" },
-            { name: "Lớp 14: Kỹ Năng Mềm A2", link: "https://google.com" },
-            { name: "Lớp 15: Tư Duy Phản Biện", link: "https://zalo.me" },
-            { name: "Lớp 16: Luyện Chữ Đẹp", link: "https://zoom.us" },
-            { name: "Lớp 17: Vẽ Mỹ Thuật K1", link: "https://google.com" },
-            { name: "Lớp 18: Nhạc Cụ Ghi-ta", link: "https://zalo.me" },
-            { name: "Lớp 19: Lớp Kịch Nghệ Thuật", link: "https://zoom.us" },
-            { name: "Lớp 20: Kế Toán Doanh Nghiệp", link: "https://google.com" }
+            // Các Lớp Khối 2
+            { name: "Skykid", link: "https://hatbui10.github.io/skykid/" },
+            { name: "Smartkid", link: "https://hatbui10.github.io/smartkid/" },
+            { name: "Cloudkid", link: "https://hatbui10.github.io/cloudkid/" },
+
+            // Các Lớp Khối 3
+            { name: "Ozon", link: "https://hatbui10.github.io/ozon/" },
+            { name: "Mickey", link: "https://hatbui10.github.io/mickey/" },
+
+            // Các Lớp Khối 4
+            { name: "Oxford4a", link: "https://hatbui10.github.io/oxford4a/" },
+            { name: "Quest4", link: "https://hatbui10.github.io/quest/" },
+            { name: "Cambridge", link: "https://hatbui10.github.io/cambridge/" },
+            { name: "King", link: "https://hatbui10.github.io/king/" },
+            { name: "Galaxy", link: "https://hatbui10.github.io/galaxy/" },
+
+            // Các Lớp Khối 5
+            { name: "Kind5", link: "https://hatbui10.github.io/kind5/" },
+            { name: "Like5", link: "https://hatbui10.github.io/like5/" },
+            { name: "Apolo", link: "https://hatbui10.github.io/apolo/" },
+
+            // Các Lớp Khối 6
+            { name: "Smile6", link: "https://hatbui10.github.io/smile6/" },
+            { name: "Evic6", link: "https://hatbui10.github.io/evic6/" },
+            { name: "Paris6", link: "https://hatbui10.github.io/paris6/" },
+            { name: "Mar6", link: "https://hatbui10.github.io/mar6/" },
+            { name: "Good6", link: "https://hatbui10.github.io/good6/" },
+            { name: "Star6", link: "https://hatbui10.github.io/star6/" },
+
+            // Các Lớp Khối 7
+            { name: "Ila7", link: "https://hatbui10.github.io/ila7/" },
+            { name: "Moon7", link: "https://hatbui10.github.io/moon7/" },
+            { name: "Delta7", link: "https://hatbui10.github.io/delta7/" },
+            { name: "Kid7", link: "https://hatbui10.github.io/kid7/" },
+            { name: "Bossvip", link: "https://hatbui10.github.io/bossvip/" },
+
+            // Các Lớp Khối 8
+            { name: "Happy8", link: "https://hatbui10.github.io/happy8/" },
+            { name: "High8", link: "https://hatbui10.github.io/high8/" },
+            { name: "Hope8", link: "https://hatbui10.github.io/hope8/" },
+            { name: "Sun8", link: "https://hatbui10.github.io/sun8/" },
+            { name: "Supervip", link: "https://hatbui10.github.io/supervip/" },
+
+            // Các Lớp Khối 9
+            { name: "Sea9", link: "https://hatbui10.github.io/sea9/" },
+            { name: "Big9", link: "https://hatbui10.github.io/big9/" },
+            { name: "Clc9", link: "https://hatbui10.github.io/clc9/" },
+            { name: "Super9", link: "https://hatbui10.github.io/super9/" },
+
+            // Các Lớp Khối 10
+            { name: "Cloud10", link: "https://hatbui10.github.io/cloud10/" },
+            { name: "Win10", link: "https://hatbui10.github.io/win10/" },
+            { name: "Try10", link: "https://hatbui10.github.io/try10/" },
+
+            // Các Lớp Khối 11
+            { name: "Can11", link: "https://hatbui10.github.io/can11/" },
+            { name: "Ocean11", link: "https://hatbui10.github.io/ocean11/" },
+
+            // Các Lớp Khối 12
+            { name: "Ielt Wonderful 12", link: "https://hatbui10.github.io/ieltwonderful12/" },
+            { name: "Athena12", link: "https://hatbui10.github.io/athena12/" }
         ];
 
-        // 10 Phòng học mẫu
-        const danhSachPhong = ["Phòng 01", "Phòng 02", "Phòng 03", "Phòng 04", "Phòng 05", "Phòng 06", "Phòng 07", "Phòng 08", "Phòng 09", "Phòng 10"];
-        
-        const cauTrucToaNha = { "A": 2, "B": 3, "C": 4, "D": 6 };
-
+        // Cấu trúc sơ đồ hiển thị theo cụm Toà Nhà tổng
+        const cauTrucToaNha = { "30": 3, "58": 3, "158": 4, "237": 6 };
         const defaultSchedule = { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] };
         let lichHocToanTruong = JSON.parse(localStorage.getItem('lichHocTang_V4')) || defaultSchedule;
         let currentDay = 'thu2';
 
-        function updateFloorDropdown() {
-            const building = document.getElementById('select-building').value;
-            const floorSelect = document.getElementById('select-floor');
-            floorSelect.innerHTML = '';
-            for(let i = 1; i <= cauTrucToaNha[building]; i++) {
-                floorSelect.innerHTML += `<option value="${i}">Tầng ${i}</option>`;
-            }
-        }
-
         function initDropdowns() {
             const classSelect = document.getElementById('select-class');
             const teacherSelect = document.getElementById('select-teacher');
-            const roomSelect = document.getElementById('select-room');
 
+            classSelect.innerHTML = '';
             danhSachLop.forEach((lop, index) => { 
                 classSelect.innerHTML += `<option value="${index}">${lop.name}</option>`; 
             });
             
+            teacherSelect.innerHTML = '';
             danhSachGiaoVien.forEach(gv => {
                 teacherSelect.innerHTML += `<option value="${gv.name}" data-phone="${gv.phone}">${gv.name}</option>`;
             });
-            
-            danhSachPhong.forEach(phong => { 
-                roomSelect.innerHTML += `<option value="${phong}">${phong}</option>`; 
-            });
-            updateFloorDropdown();
         }
 
         function renderBuildingMap(day) {
@@ -377,7 +451,7 @@
             Object.keys(cauTrucToaNha).forEach(toa => {
                 let buildingHTML = `
                     <div class="building-block">
-                        <div class="building-header"><span class="dot dot-${toa}"></span> TOÀ NHÀ ${toa}</div>
+                        <div class="building-header"><span class="dot dot-${toa}"></span> NHÀ ${toa}</div>
                 `;
 
                 const tongSoTang = cauTrucToaNha[toa];
@@ -397,20 +471,26 @@
                             const originIndex = listClasses.findIndex(c => c === item);
                             const phoneDisplay = item.gvPhone ? item.gvPhone.replace(/(\d{4})(\d{3})(\d{3})/, "$1.$2.$3") : "";
                             
+                            let targetLink = item.lopLink;
+                            if (!targetLink) {
+                                const found = danhSachLop.find(l => l.name === item.lopName);
+                                targetLink = found ? found.link : "#";
+                            }
+
                             buildingHTML += `
                                 <div class="class-card">
-                                    <button class="btn-delete" onclick="deleteCard('${day}', ${originIndex})">✕</button>
-                                    <div class="card-time">⏱ Ca: ${item.time}</div>
+                                    <button class="btn-delete" title="Xóa lịch" onclick="deleteCard('${day}', ${originIndex})">✕</button>
                                     
-                                    <a href="${item.lopLink}" target="_blank" class="card-title-link">${item.lopName}</a>
+                                    <div class="card-row-top">
+                                        <div class="card-time">⏱ Ca: ${item.time}</div>
+                                        <span class="badge-student">👥 Sĩ số: ${item.studentSize}</span>
+                                    </div>
                                     
-                                    <div class="card-info">
+                                    <a href="${targetLink}" target="_blank" class="card-title-link">${item.lopName}</a>
+                                    
+                                    <div class="teacher-row">
                                         <span>👤 GV: ${item.gvName}</span>
                                         <a href="tel:${item.gvPhone}" class="btn-call-prominent">📞 Gọi ngay: ${phoneDisplay}</a>
-                                    </div>
-                                    <div class="card-meta">
-                                        <span class="badge-room">🚪 ${item.phongName}</span>
-                                        <span class="badge-student">👥 Sĩ số: ${item.studentSize}</span>
                                     </div>
                                 </div>
                             `;
@@ -428,23 +508,22 @@
         function addSchedule() {
             const targetDay = document.getElementById('select-day').value;
             const time = document.getElementById('select-time').value;
-            
             const lopIndex = document.getElementById('select-class').value;
             const lopName = danhSachLop[lopIndex].name;
             const lopLink = danhSachLop[lopIndex].link;
-            
             const studentSize = document.getElementById('input-size').value || "0";
-            
             const teacherSelect = document.getElementById('select-teacher');
             const gvName = teacherSelect.value;
             const gvPhone = teacherSelect.options[teacherSelect.selectedIndex].getAttribute('data-phone');
             
-            const building = document.getElementById('select-building').value;
-            const floor = document.getElementById('select-floor').value;
-            const phongName = document.getElementById('select-room').value;
+            // Xử lý bóc tách tự động Tầng và Toà nhà từ chuỗi dạng "T1-30", "T3-158"
+            const buildingValue = document.getElementById('select-building').value; // Ví dụ: "T2-158"
+            const parts = buildingValue.split('-'); // Cắt thành ["T2", "158"]
+            
+            const floor = parts[0].replace('T', ''); // Lấy số tầng "2"
+            const building = parts[1]; // Lấy khu toà nhà "158"
 
-            lichHocToanTruong[targetDay].push({ time, lopName, lopLink, studentSize, gvName, gvPhone, building, floor, phongName });
-
+            lichHocToanTruong[targetDay].push({ time, lopName, lopLink, studentSize, gvName, gvPhone, building, floor });
             localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
             renderBuildingMap(currentDay);
             alert("Đã xếp lịch thành công!");
@@ -455,6 +534,15 @@
                 lichHocToanTruong[day].splice(index, 1);
                 localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
                 renderBuildingMap(day);
+            }
+        }
+
+        function clearCurrentDaySchedule() {
+            const dayText = document.querySelector('.tab-btn.active').innerText;
+            if (confirm(`Bạn có chắc chắn muốn xóa lịch của ${dayText}?`)) {
+                lichHocToanTruong[currentDay] = [];
+                localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
+                renderBuildingMap(currentDay);
             }
         }
 
@@ -471,5 +559,4 @@
         };
     </script>
 </body>
-    </html>
-        
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Xếp Lịch Tự Động - Lưu Dữ Liệu Vĩnh Viễn</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 20px;
+            color: #cbd5e1;
+        }
+        h2 {
+            text-align: center;
+            color: #f8fafc;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        
+        /* BỘ CÔNG CỤ XẾP LỊCH DROPDOWN */
+        .admin-panel {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .admin-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .form-group label {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .form-group select {
+            background-color: #0f172a;
+            border: 1px solid #475569;
+            color: #f8fafc;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+        }
+        .form-group select:focus {
+            border-color: #3b82f6;
+        }
+        .btn-submit {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+        .btn-submit:hover {
+            background-color: #2563eb;
+        }
+
+        /* THANH CHỌN THỨ */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            border: 1px solid #334155;
+            background-color: #1e293b;
+            color: #94a3b8;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .tab-btn:hover {
+            background-color: #334155;
+            color: #f8fafc;
+        }
+        .tab-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        /* DANH SÁCH HIỂN THỊ THẺ LỚP */
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: 18px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            border-left: 4px solid #3b82f6;
+            padding-left: 10px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        /* THIẾT KẾ THẺ CÓ NÚT XÓA Ở GÓC */
+        .class-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .btn-delete {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-delete:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .line-time {
+            font-size: 13px;
+            color: #3b82f6;
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding-right: 40px;
+        }
+        .line-classname {
+            font-size: 18px;
+            color: #f8fafc;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .line-teacher {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn-call {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: #059669;
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            max-width: fit-content;
+        }
+        .line-room {
+            font-size: 14px;
+            font-weight: bold;
+            color: #06b6d4;
+            background-color: rgba(6, 182, 212, 0.1);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            display: inline-block;
+        }
+        .empty-message {
+            color: #64748b;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>HỆ THỐNG XẾP LỊCH TỰ ĐỘNG (LƯU TRỮ VĨNH VIỄN)</h2>
+
+    <div class="admin-panel">
+        <div class="admin-title">🛠 Bộ công cụ xếp lịch nhanh</div>
+        <div class="form-grid">
+            
+            <div class="form-group">
+                <label>Chọn Thứ</label>
+                <select id="select-day">
+                    <option value="thu2">Thứ 2</option>
+                    <option value="thu3">Thứ 3</option>
+                    <option value="thu4">Thứ 4</option>
+                    <option value="thu5">Thứ 5</option>
+                    <option value="thu6">Thứ 6</option>
+                    <option value="thu7">Thứ 7</option>
+                    <option value="cn">Chủ Nhật</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Thời gian ca học</label>
+                <select id="select-time">
+                    <option value="18h00 - 19h30">Ca 18h00 - 19h30</option>
+                    <option value="19h45 - 21h15">Ca 19h45 - 21h15</option>
+                    <option value="08h00 - 09h30">Ca sáng 08h00 - 09h30</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Chọn Lớp Học</label>
+                <select id="select-class"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Chọn Giáo Viên</label>
+                <select id="select-teacher"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Chọn Phòng</label>
+                <select id="select-room"></select>
+            </div>
+
+            <button class="btn-submit" onclick="addSchedule()">➕ Thêm Lịch</button>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="changeDay('thu2', this)">Thứ 2</button>
+        <button class="tab-btn" onclick="changeDay('thu3', this)">Thứ 3</button>
+        <button class="tab-btn" onclick="changeDay('thu4', this)">Thứ 4</button>
+        <button class="tab-btn" onclick="changeDay('thu5', this)">Thứ 5</button>
+        <button class="tab-btn" onclick="changeDay('thu6', this)">Thứ 6</button>
+        <button class="tab-btn" onclick="changeDay('thu7', this)">Thứ 7</button>
+        <button class="tab-btn" onclick="changeDay('cn', this)">Chủ Nhật</button>
+    </div>
+
+    <div class="content-container">
+        <div class="section-title" id="day-title">Danh sách ca học ngày Thứ 2:</div>
+        <div class="card-grid" id="schedule-grid"></div>
+    </div>
+
+    <script>
+        // MẢNG DỮ LIỆU DANH SÁCH GỐC
+        const danhSachGiaoVien = [
+            { name: "Nguyễn Văn Anh", phone: "0901234567" },
+            { name: "Trần Thị Bình", phone: "0911222333" },
+            { name: "Lê Hoàng Cường", phone: "0988777666" },
+            { name: "Phạm Minh Đức", phone: "0944555666" }
+        ];
+
+        const danhSachLop = [
+            "Lớp Tiếng Anh Giao Tiếp A1",
+            "Lớp Toán Tư Duy B3",
+            "Lớp Lập Trình Python C2",
+            "Lớp Hóa Học Cơ Bản K1",
+            "Lớp Hình Học Phẳng"
+        ];
+
+        const danhSachPhong = [
+            "Phòng 101", "Phòng 102", "Phòng 103", "Phòng 104", "Phòng 105",
+            "Phòng 201", "Phòng 202", "Phòng 203", "Phòng 204", "Phòng 205"
+        ];
+
+        // Khởi tạo đối tượng lịch học mặc định trống
+        const defaultSchedule = {
+            thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: []
+        };
+
+        // LẤY DỮ LIỆU TỪ LOCALSTORAGE (Nếu có dữ liệu cũ thì xài, không thì xài default trống)
+        let lichHocToanTruong = JSON.parse(localStorage.getItem('lichHocToanTruong')) || defaultSchedule;
+
+        let currentDay = 'thu2'; 
+
+        // TỰ ĐỘNG NẠP MẢNG VÀO DROPDOWN
+        function initDropdowns() {
+            const classSelect = document.getElementById('select-class');
+            const teacherSelect = document.getElementById('select-teacher');
+            const roomSelect = document.getElementById('select-room');
+
+            danhSachLop.forEach(lop => { classSelect.innerHTML += `<option value="${lop}">${lop}</option>`; });
+            danhSachGiaoVien.forEach(gv => { teacherSelect.innerHTML += `<option value="${gv.name}" data-phone="${gv.phone}">${gv.name}</option>`; });
+            danhSachPhong.forEach(phong => { roomSelect.innerHTML += `<option value="${phong}">${phong}</option>`; });
+        }
+
+        // ĐƯA DỮ LIỆU LÊN GIAO DIỆN
+        function renderSchedule(day) {
+            const grid = document.getElementById('schedule-grid');
+            grid.innerHTML = ''; 
+
+            const listClasses = lichHocToanTruong[day];
+
+            if (!listClasses || listClasses.length === 0) {
+                grid.innerHTML = `<p class="empty-message">Không có ca học nào được xếp trong ngày này.</p>`;
+                return;
+            }
+
+            listClasses.forEach((item, index) => {
+                const phoneDisplay = item.gvPhone ? item.gvPhone.replace(/(\d{4})(\d{3})(\d{3})/, "$1.$2.$3") : "Không có SĐT";
+                
+                const cardHTML = `
+                    <div class="class-card">
+                        <button class="btn-delete" onclick="deleteCard('${day}', ${index})">Xóa</button>
+                        <div class="line-time">⏱ Ca ${item.time}</div>
+                        <div class="line-classname">${item.lopName}</div>
+                        <div class="line-teacher">
+                            <span>👤 GV: ${item.gvName}</span>
+                            ${item.gvPhone ? `<a href="tel:${item.gvPhone}" class="btn-call">📞 Gọi: ${phoneDisplay}</a>` : ''}
+                        </div>
+                        <div class="line-room">🚪 ${item.phongName}</div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        // HÀM LƯU DỮ LIỆU VÀO LOCALSTORAGE
+        function saveToLocalStorage() {
+            localStorage.setItem('lichHocToanTruong', JSON.stringify(lichHocToanTruong));
+        }
+
+        // THÊM LỊCH VÀ CẬP NHẬT LOCALSTORAGE
+        function addSchedule() {
+            const targetDay = document.getElementById('select-day').value;
+            const time = document.getElementById('select-time').value;
+            const lopName = document.getElementById('select-class').value;
+            
+            const teacherSelect = document.getElementById('select-teacher');
+            const gvName = teacherSelect.value;
+            const gvPhone = teacherSelect.options[teacherSelect.selectedIndex].getAttribute('data-phone');
+            
+            const phongName = document.getElementById('select-room').value;
+
+            lichHocToanTruong[targetDay].push({ time, lopName, gvName, gvPhone, phongName });
+
+            saveToLocalStorage(); // <-- Lưu lại vào máy
+            renderSchedule(currentDay);
+            alert("Đã xếp lịch và lưu thành công!");
+        }
+
+        // XÓA LỊCH VÀ CẬP NHẬT LOCALSTORAGE
+        function deleteCard(day, index) {
+            if (confirm("Bạn có chắc chắn muốn xóa ca học này không?")) {
+                lichHocToanTruong[day].splice(index, 1);
+                
+                saveToLocalStorage(); // <-- Cập nhật lại bộ nhớ sau khi xóa
+                renderSchedule(day);
+            }
+        }
+
+        // CHUYỂN ĐỔI QUA LẠI GIỮA CÁC THỨ
+        function changeDay(dayId, buttonEl) {
+            currentDay = dayId;
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttonEl.classList.add('active');
+
+            document.getElementById('day-title').innerText = `Danh sách ca học ngày ${buttonEl.innerText}:`;
+            renderSchedule(dayId);
+        }
+
+        window.onload = function() {
+            initDropdowns();
+            renderSchedule('thu2'); // Mặc định mở lên hiển thị Thứ 2
+        };
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>   
+<!DOCTYPE html>  
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -20,8 +20,32 @@
             font-size: 20px;
         }
         
-        /* BỘ CÔNG CỤ XẾP LỊCH */
+        /* NÚT KÍCH HOẠT MẬT KHẨU */
+        .password-trigger-container {
+            max-width: 1300px;
+            margin: 0 auto 15px auto;
+            text-align: right;
+        }
+        .btn-unlock {
+            background-color: #1e293b;
+            color: #3b82f6;
+            border: 1px solid #334155;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .btn-unlock:hover {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* BỘ CÔNG CỤ XẾP LỊCH - MẶC ĐỊNH ẨN */
         .admin-panel {
+            display: none; /* Ẩn đi khi chưa đăng nhập */
             background-color: #1e293b;
             border: 1px solid #334155;
             border-radius: 12px;
@@ -181,7 +205,10 @@
             flex-direction: column;
             gap: 8px;
         }
+        
+        /* Nút xóa mặc định ẩn, chỉ hiện khi đã mở khóa admin panel */
         .btn-delete {
+            display: none; 
             position: absolute;
             top: 10px;
             right: 12px;
@@ -194,7 +221,6 @@
             border-radius: 4px;
             width: 22px;
             height: 22px;
-            display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
@@ -211,7 +237,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-right: 25px; /* Tránh đè lên nút Xóa */
+            padding-right: 25px;
         }
         .card-time { font-size: 11px; color: #3b82f6; font-weight: bold; }
         .badge-student { font-size: 11px; color: #e2e8f0; background: #334155; padding: 2px 6px; border-radius: 4px; }
@@ -272,7 +298,13 @@
 
     <h2>SƠ ĐỒ PHÂN TẦNG LỚP HỌC</h2>
 
-    <div class="admin-panel">
+    <!-- KHU VỰC NÚT ĐĂNG NHẬP MẬT KHẨU -->
+    <div class="password-trigger-container">
+        <button id="trigger-auth-btn" class="btn-unlock" onclick="checkAdminPassword()">🔐 Nhập mật khẩu quản trị để xếp/sửa lịch</button>
+    </div>
+
+    <!-- KHUNG XẾP LỊCH (MẶC ĐỊNH BỊ ẨN QUA CSS) -->
+    <div class="admin-panel" id="admin-panel-box">
         <div class="admin-title">🛠 Xếp lịch & phân tầng trực quan</div>
         <div class="form-grid">
             <div class="form-group">
@@ -349,6 +381,11 @@
     <div class="content-container" id="building-container"></div>
 
     <script>
+        // Biến kiểm soát trạng thái đăng nhập quyền sửa lịch
+        let isAdminUnlocked = false;
+        // BẠN CÓ THỂ THAY ĐỔI MẬT KHẨU Ở ĐÂY
+        const ADMIN_PASSWORD = "123456"; 
+
         // MẢNG GIÁO VIÊN
         const danhSachGiaoVien = [
             { name: " cô Phương", phone: "0901234567" },
@@ -357,91 +394,90 @@
             { name: "P.Thanh", phone: "0901234567" },
             { name: "Thanh Thảo", phone: "0911222333" },
             { name: "Hà An", phone: "0988777666" },
-        { name: "Mai Ly", phone: "0901234567" },
+            { name: "Mai Ly", phone: "0901234567" },
             { name: "Phương galaxy", phone: "0911222333" },
             { name: "Thu Phương quest", phone: "0988777666" },
-        { name: "Ngô Hằng", phone: "0901234567" },
+            { name: "Ngô Hằng", phone: "0901234567" },
             { name: "Thu Hà 96", phone: "0911222333" },
             { name: "Tân", phone: "0988777666" },
-        { name: "Trà My", phone: "0901234567" },
+            { name: "Trà My", phone: "0901234567" },
             { name: "Hà Linh", phone: "0911222333" },
             { name: "Tuệ Minh", phone: "0988777666" },
-        { name: "Mạnh Toàn", phone: "0911222333" },
+            { name: "Mạnh Toàn", phone: "0911222333" },
             { name: "Nhung", phone: "0988777666" },
-        { name: "Minh Phương", phone: "0911222333" }
-            
+            { name: "Minh Phương", phone: "0911222333" }
         ];
 
         // DANH SÁCH LỚP HỌC
         const danhSachLop = [
-            // Các Lớp Khối 2
             { name: "Skykid", link: "https://hatbui10.github.io/skykid/" },
             { name: "Smartkid", link: "https://hatbui10.github.io/smartkid/" },
             { name: "Cloudkid", link: "https://hatbui10.github.io/cloudkid/" },
-
-            // Các Lớp Khối 3
             { name: "Ozon", link: "https://hatbui10.github.io/ozon/" },
             { name: "Mickey", link: "https://hatbui10.github.io/mickey/" },
-
-            // Các Lớp Khối 4
             { name: "Oxford4a", link: "https://hatbui10.github.io/oxford4a/" },
             { name: "Quest4", link: "https://hatbui10.github.io/quest/" },
             { name: "Cambridge", link: "https://hatbui10.github.io/cambridge/" },
             { name: "King", link: "https://hatbui10.github.io/king/" },
             { name: "Galaxy", link: "https://hatbui10.github.io/galaxy/" },
-
-            // Các Lớp Khối 5
             { name: "Kind5", link: "https://hatbui10.github.io/kind5/" },
             { name: "Like5", link: "https://hatbui10.github.io/like5/" },
             { name: "Apolo", link: "https://hatbui10.github.io/apolo/" },
-
-            // Các Lớp Khối 6
             { name: "Smile6", link: "https://hatbui10.github.io/smile6/" },
             { name: "Evic6", link: "https://hatbui10.github.io/evic6/" },
             { name: "Paris6", link: "https://hatbui10.github.io/paris6/" },
             { name: "Mar6", link: "https://hatbui10.github.io/mar6/" },
             { name: "Good6", link: "https://hatbui10.github.io/good6/" },
             { name: "Star6", link: "https://hatbui10.github.io/star6/" },
-
-            // Các Lớp Khối 7
             { name: "Ila7", link: "https://hatbui10.github.io/ila7/" },
             { name: "Moon7", link: "https://hatbui10.github.io/moon7/" },
             { name: "Delta7", link: "https://hatbui10.github.io/delta7/" },
             { name: "Kid7", link: "https://hatbui10.github.io/kid7/" },
             { name: "Bossvip", link: "https://hatbui10.github.io/bossvip/" },
-
-            // Các Lớp Khối 8
             { name: "Happy8", link: "https://hatbui10.github.io/happy8/" },
             { name: "High8", link: "https://hatbui10.github.io/high8/" },
             { name: "Hope8", link: "https://hatbui10.github.io/hope8/" },
             { name: "Sun8", link: "https://hatbui10.github.io/sun8/" },
             { name: "Supervip", link: "https://hatbui10.github.io/supervip/" },
-
-            // Các Lớp Khối 9
             { name: "Sea9", link: "https://hatbui10.github.io/sea9/" },
             { name: "Big9", link: "https://hatbui10.github.io/big9/" },
             { name: "Clc9", link: "https://hatbui10.github.io/clc9/" },
             { name: "Super9", link: "https://hatbui10.github.io/super9/" },
-
-            // Các Lớp Khối 10
             { name: "Cloud10", link: "https://hatbui10.github.io/cloud10/" },
             { name: "Win10", link: "https://hatbui10.github.io/win10/" },
             { name: "Try10", link: "https://hatbui10.github.io/try10/" },
-
-            // Các Lớp Khối 11
             { name: "Can11", link: "https://hatbui10.github.io/can11/" },
             { name: "Ocean11", link: "https://hatbui10.github.io/ocean11/" },
-
-            // Các Lớp Khối 12
             { name: "Ielt Wonderful 12", link: "https://hatbui10.github.io/ieltwonderful12/" },
             { name: "Athena12", link: "https://hatbui10.github.io/athena12/" }
         ];
 
-        // Cấu trúc sơ đồ hiển thị theo cụm Toà Nhà tổng
         const cauTrucToaNha = { "30": 3, "58": 3, "158": 4, "237": 6 };
         const defaultSchedule = { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] };
         let lichHocToanTruong = JSON.parse(localStorage.getItem('lichHocTang_V4')) || defaultSchedule;
         let currentDay = 'thu2';
+
+        // Hàm kiểm tra mật khẩu để mở bộ công cụ quản lý và các nút xóa lịch
+        function checkAdminPassword() {
+            if (isAdminUnlocked) {
+                // Nếu đang mở, click lại sẽ đóng bảng quản lý (Log out)
+                isAdminUnlocked = false;
+                document.getElementById('admin-panel-box').style.display = 'none';
+                document.getElementById('trigger-auth-btn').innerText = '🔐 Nhập mật khẩu quản trị để xếp/sửa lịch';
+                renderBuildingMap(currentDay);
+                return;
+            }
+
+            const inputPass = prompt("Vui lòng nhập mật khẩu quản lý để sửa đổi lịch học:");
+            if (inputPass === ADMIN_PASSWORD) {
+                isAdminUnlocked = true;
+                document.getElementById('admin-panel-box').style.display = 'block'; // Hiện form chỉnh sửa
+                document.getElementById('trigger-auth-btn').innerText = '🔒 Khóa chế độ sửa lịch';
+                renderBuildingMap(currentDay); // Render lại để hiển thị các nút Xóa (nút ✕)
+            } else if (inputPass !== null) {
+                alert("Mật khẩu không chính xác! Bạn không có quyền sửa lịch học.");
+            }
+        }
 
         function initDropdowns() {
             const classSelect = document.getElementById('select-class');
@@ -493,9 +529,12 @@
                                 targetLink = found ? found.link : "#";
                             }
 
+                            // Quản lý hiển thị nút xóa (✕) dựa trên biến kiểm tra đăng nhập mật khẩu
+                            const deleteBtnStyle = isAdminUnlocked ? "display: flex;" : "display: none;";
+
                             buildingHTML += `
                                 <div class="class-card">
-                                    <button class="btn-delete" title="Xóa lịch" onclick="deleteCard('${day}', ${originIndex})">✕</button>
+                                    <button class="btn-delete" style="${deleteBtnStyle}" title="Xóa lịch" onclick="deleteCard('${day}', ${originIndex})">✕</button>
                                     
                                     <div class="card-row-top">
                                         <div class="card-time">⏱ Ca: ${item.time}</div>
@@ -522,6 +561,8 @@
         }
 
         function addSchedule() {
+            if (!isAdminUnlocked) return alert("Bạn cần đăng nhập bằng mật khẩu trước!");
+            
             const targetDay = document.getElementById('select-day').value;
             const time = document.getElementById('select-time').value;
             const lopIndex = document.getElementById('select-class').value;
@@ -532,12 +573,11 @@
             const gvName = teacherSelect.value;
             const gvPhone = teacherSelect.options[teacherSelect.selectedIndex].getAttribute('data-phone');
             
-            // Xử lý bóc tách tự động Tầng và Toà nhà từ chuỗi dạng "T1-30", "T3-158"
-            const buildingValue = document.getElementById('select-building').value; // Ví dụ: "T2-158"
-            const parts = buildingValue.split('-'); // Cắt thành ["T2", "158"]
+            const buildingValue = document.getElementById('select-building').value; 
+            const parts = buildingValue.split('-'); 
             
-            const floor = parts[0].replace('T', ''); // Lấy số tầng "2"
-            const building = parts[1]; // Lấy khu toà nhà "158"
+            const floor = parts[0].replace('T', ''); 
+            const building = parts[1]; 
 
             lichHocToanTruong[targetDay].push({ time, lopName, lopLink, studentSize, gvName, gvPhone, building, floor });
             localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
@@ -546,6 +586,7 @@
         }
 
         function deleteCard(day, index) {
+            if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
             if (confirm("Bạn muốn xóa lớp học này?")) {
                 lichHocToanTruong[day].splice(index, 1);
                 localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
@@ -554,6 +595,7 @@
         }
 
         function clearCurrentDaySchedule() {
+            if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
             const dayText = document.querySelector('.tab-btn.active').innerText;
             if (confirm(`Bạn có chắc chắn muốn xóa lịch của ${dayText}?`)) {
                 lichHocToanTruong[currentDay] = [];

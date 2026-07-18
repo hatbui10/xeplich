@@ -600,7 +600,7 @@ function addSchedule() {
         currentDay = dayId;
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         buttonEl.classList.add('active');
-syncToFirebase(lichHocToanTruong);
+
         renderScheduleList(dayId);
     }
 function deleteCard(day, index) {

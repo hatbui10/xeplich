@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <title>Sơ Đồ Lớp Học - Hệ Thống Quản Lý</title>
     <style>
         * {
@@ -537,61 +539,108 @@
         });
     }
 
-    function addSchedule() {
-        if (!isAdminUnlocked) return alert("Bạn cần đăng nhập bằng mật khẩu trước!");
-        
-        const targetDay = document.getElementById('select-day').value;
-        const time = document.getElementById('select-time').value;
-        const lopIndex = document.getElementById('select-class').value;
-        const lopName = danhSachLop[lopIndex].name;
-        const lopLink = danhSachLop[lopIndex].link;
-        const studentSize = document.getElementById('input-size').value || "0";
-        const teacherSelect = document.getElementById('select-teacher');
-        const gvName = teacherSelect.value;
-        const gvPhone = teacherSelect.options[teacherSelect.selectedIndex].getAttribute('data-phone');
-        
-        const buildingValue = document.getElementById('select-building').value; 
-        const parts = buildingValue.split('-'); 
-        
-        const floor = parts[0].replace('T', ''); 
-        const building = parts[1]; 
+   
+   
 
-        lichHocToanTruong[targetDay].push({ time, lopName, lopLink, studentSize, gvName, gvPhone, building, floor });
-        localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
-        renderScheduleList(currentDay);
-        alert("Đã xếp lịch thành công!");
-    }
+   
 
-    function deleteCard(day, index) {
-        if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
-        if (confirm("Bạn muốn xóa lớp học này?")) {
-            lichHocToanTruong[day].splice(index, 1);
-            localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
-            renderScheduleList(day);
-        }
-    }
+  // ĐẶT TOÀN BỘ CODE NÀY VÀO TRONG MỘT THẺ SCRIPT DUY NHẤT Ở CUỐI BODY
 
-    function clearCurrentDaySchedule() {
-        if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
-        const dayText = document.querySelector('.tab-btn.active').innerText;
-        if (confirm(`Bạn có chắc chắn muốn xóa lịch của ${dayText}?`)) {
-            lichHocToanTruong[currentDay] = [];
-            localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
-            renderScheduleList(currentDay);
-        }
-    }
+// 1. Cấu hình Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyDbCF0pFsdXqD14Y-wjWLFoNCGfP1LBlD8",
+    authDomain: "tienganhhavi-12b54.firebaseapp.com",
+    projectId: "tienganhhavi-12b54",
+    storageBucket: "tienganhhavi-12b54.firebasestorage.app",
+    messagingSenderId: "208059039650",
+    appId: "1:208059039650:web:d272318418e01d0f50fcfb"
+};
 
-    function changeDay(dayId, buttonEl) {
+// 2. Khởi tạo Firebase (Sử dụng bản compat để tương thích với code cũ của bạn)
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// 3. Hàm đồng bộ lên Firebase
+function syncToFirebase(data) {
+    db.collection("data").doc("lichHoc").set({ content: data })
+    .then(() => {
+        console.log("✅ Đã đồng bộ thành công lên Firebase!");
+    })
+    .catch((error) => {
+        console.error("❌ Lỗi đồng bộ Firebase:", error);
+        alert("Có lỗi xảy ra khi lưu lên máy chủ: " + error.message);
+    });
+}
+
+// 4. Các hàm xử lý giao diện của bạn (giữ nguyên logic cũ)
+function addSchedule() {
+    if (!isAdminUnlocked) return alert("Bạn cần đăng nhập bằng mật khẩu trước!");
+    const targetDay = document.getElementById('select-day').value;
+    const time = document.getElementById('select-time').value;
+    const lopIndex = document.getElementById('select-class').value;
+    const lopName = danhSachLop[lopIndex].name;
+    const lopLink = danhSachLop[lopIndex].link;
+    const studentSize = document.getElementById('input-size').value || "0";
+    const teacherSelect = document.getElementById('select-teacher');
+    const gvName = teacherSelect.value;
+    const gvPhone = teacherSelect.options[teacherSelect.selectedIndex].getAttribute('data-phone');
+    const buildingValue = document.getElementById('select-building').value; 
+    const parts = buildingValue.split('-'); 
+    const floor = parts[0].replace('T', ''); 
+    const building = parts[1]; 
+
+    lichHocToanTruong[targetDay].push({ time, lopName, lopLink, studentSize, gvName, gvPhone, building, floor });
+    localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
+    syncToFirebase(lichHocToanTruong);
+    renderScheduleList(currentDay);
+    alert("Đã xếp lịch thành công!");
+}
+
+ function changeDay(dayId, buttonEl) {
         currentDay = dayId;
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         buttonEl.classList.add('active');
+syncToFirebase(lichHocToanTruong);
         renderScheduleList(dayId);
     }
+function deleteCard(day, index) {
+    if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
+    if (confirm("Bạn muốn xóa lớp học này?")) {
+        lichHocToanTruong[day].splice(index, 1);
+        localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
+        syncToFirebase(lichHocToanTruong);
+        renderScheduleList(day);
+    }
+}
 
-    window.onload = function() {
-        initDropdowns();
+function clearCurrentDaySchedule() {
+    if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
+    if (confirm(`Bạn có chắc chắn muốn xóa lịch của ngày này?`)) {
+        lichHocToanTruong[currentDay] = [];
+        localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
+        syncToFirebase(lichHocToanTruong);
+        renderScheduleList(currentDay);
+    }
+}
+
+// 5. Chạy khi trang tải xong
+window.onload = function() {
+    initDropdowns();
+    
+    // Tải dữ liệu từ Firebase
+    db.collection("data").doc("lichHoc").get().then((doc) => {
+        if (doc.exists) {
+            lichHocToanTruong = doc.data().content;
+            localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
+            renderScheduleList('thu2');
+        } else {
+            renderScheduleList('thu2');
+        }
+    }).catch(err => {
+        console.error("Lỗi tải dữ liệu:", err);
         renderScheduleList('thu2');
-    };
+    });
+};
 </script>
 </body>
 </html>

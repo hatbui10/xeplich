@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sơ Đồ Phân Tầng Lớp Học - Hệ Thống Quản Lý</title>
+    <title>Sơ Đồ Lớp Học - Hệ Thống Quản Lý</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0f172a;
@@ -20,6 +23,13 @@
             font-size: 20px;
         }
         
+        /* CẤU TRÚC KHOẢNG CÁCH BIÊN CỐ ĐỊNH */
+        .container-wrapper {
+            margin-top: 30px;
+            margin-left: 3px;
+            margin-right: 3px;
+        }
+
         /* NÚT KÍCH HOẠT MẬT KHẨU */
         .password-trigger-container {
             max-width: 1300px;
@@ -45,7 +55,7 @@
 
         /* BỘ CÔNG CỤ XẾP LỊCH - MẶC ĐỊNH ẨN */
         .admin-panel {
-            display: none; /* Ẩn đi khi chưa đăng nhập */
+            display: none;
             background-color: #1e293b;
             border: 1px solid #334155;
             border-radius: 12px;
@@ -85,7 +95,6 @@
             font-size: 13px;
             outline: none;
             width: 100%;
-            box-sizing: border-box;
         }
         .btn-submit {
             background-color: #3b82f6;
@@ -138,79 +147,32 @@
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
         }
 
-        /* KHU VỰC SƠ ĐỒ TOÀ NHÀ */
-        .content-container {
+        /* KHU VỰC CHỨA DANH SÁCH THẺ TRỰC TIẾP */
+        .schedule-list-grid {
             max-width: 1300px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .building-block {
-            background-color: #1e293b;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            padding: 15px;
-        }
-        .building-header {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #334155;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-        .dot-30 { background-color: #ef4444; }
-        .dot-58 { background-color: #fbbf24; }
-        .dot-158 { background-color: #10b981; }
-        .dot-237 { background-color: #a78bfa; }
-
-        .floor-row {
-            display: flex;
-            flex-direction: column;
-            border-bottom: 1px dashed #334155;
-            padding: 12px 0;
-            align-items: flex-start;
-            gap: 8px;
-        }
-        .floor-row:last-child { border-bottom: none; }
-        
-        .floor-label {
-            font-weight: bold;
-            color: #3b82f6;
-            font-size: 15px;
-        }
-        
-        .floor-classes {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
         }
 
-        /* THẺ LỚP HỌC TRONG TẦNG */
+        /* ĐỊNH DẠNG THẺ LỚP HỌC */
         .class-card {
-            background: #0f172a;
-            border-radius: 8px;
-            padding: 12px;
-            border: 1px solid #475569;
+            background: #161822;
+            border-left: 4px solid #ff007f;
+            border-radius: 6px;
+            padding: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
             position: relative;
-            box-sizing: border-box;
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            animation: fadeIn 0.3s ease-in-out;
         }
         
-        /* Nút xóa mặc định ẩn, chỉ hiện khi đã mở khóa admin panel */
         .btn-delete {
             display: none; 
             position: absolute;
-            top: 10px;
+            top: 12px;
             right: 12px;
             background: #273549;
             border: 1px solid #475569;
@@ -232,37 +194,54 @@
             border-color: #ef4444;
         }
 
-        /* DÒNG 1: CA HỌC VÀ SĨ SỐ */
-        .card-row-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* DÒNG 1: TÊN LỚP */
+        .class-name-container {
+            margin-bottom: 10px;
             padding-right: 25px;
         }
-        .card-time { font-size: 11px; color: #3b82f6; font-weight: bold; }
-        .badge-student { font-size: 11px; color: #e2e8f0; background: #334155; padding: 2px 6px; border-radius: 4px; }
-        
-        /* DÒNG 2: TÊN LỚP HỌC */
-        .card-title-link { 
-            font-size: 16px; 
-            color: #f8fafc; 
-            font-weight: bold; 
+        .class-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
             text-decoration: underline;
-            cursor: pointer;
-            width: fit-content;
         }
-        .card-title-link:hover { color: #3b82f6; }
-        
-        /* DÒNG 3: GIÁO VIÊN VÀ NÚT GỌI */
-        .teacher-row {
+        .class-name:hover {
+            color: #00f2fe;
+        }
+
+        /* CÁC DÒNG THÔNG TIN NỘI DUNG THẺ */
+        .info-row {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin: 6px 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
             flex-wrap: wrap;
-            font-size: 12px;
-            color: #94a3b8;
+            gap: 5px;
         }
+
+        .info-left-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .info-label {
+            color: #64748b;
+            min-width: 90px;
+            display: inline-block;
+        }
+
+        .info-value {
+            color: #f8fafc;
+        }
+
+        .info-time {
+            color: #ffbd59;
+            font-weight: 600;
+        }
+
+        /* NÚT GỌI ĐIỆN */
         .btn-call-prominent { 
             display: inline-flex;
             align-items: center;
@@ -273,29 +252,35 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 11px;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
             white-space: nowrap;
         }
         .btn-call-prominent:hover { background-color: #047857; }
         
-        .empty-floor { color: #475569; font-style: italic; font-size: 12px; }
+        .empty-schedule { 
+            text-align: center;
+            color: #475569; 
+            font-style: italic; 
+            font-size: 14px; 
+            padding: 30px 0; 
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         @media (min-width: 768px) {
-            body { padding: 20px; }
-            h2 { font-size: 24px; }
-            .floor-row { flex-direction: row; align-items: center; gap: 0; }
-            .floor-label { width: 100px; flex-shrink: 0; }
-            .floor-classes { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+            .schedule-list-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
             .tab-btn { padding: 12px 24px; font-size: 15px; border-radius: 8px; }
         }
     </style>
 </head>
 <body>
 
-    <hr style="border: 1px solid #334155; max-width: 1300px; margin: 10px auto;">
-
+<div class="container-wrapper">
     <h2>SƠ ĐỒ PHÂN TẦNG LỚP HỌC</h2>
 
     <!-- KHU VỰC NÚT ĐĂNG NHẬP MẬT KHẨU -->
@@ -303,7 +288,7 @@
         <button id="trigger-auth-btn" class="btn-unlock" onclick="checkAdminPassword()">🔐 Nhập mật khẩu quản trị để xếp/sửa lịch</button>
     </div>
 
-    <!-- KHUNG XẾP LỊCH (MẶC ĐỊNH BỊ ẨN QUA CSS) -->
+    <!-- KHUNG XẾP LỊCH -->
     <div class="admin-panel" id="admin-panel-box">
         <div class="admin-title">🛠 Xếp lịch & phân tầng trực quan</div>
         <div class="form-grid">
@@ -368,6 +353,7 @@
         </div>
     </div>
 
+    <!-- THANH NÚT CHỌN THỨ -->
     <div class="tabs">
         <button class="tab-btn active" onclick="changeDay('thu2', this)">Thứ 2</button>
         <button class="tab-btn" onclick="changeDay('thu3', this)">Thứ 3</button>
@@ -378,243 +364,234 @@
         <button class="tab-btn" onclick="changeDay('cn', this)">Chủ Nhật</button>
     </div>
 
-    <div class="content-container" id="building-container"></div>
+    <!-- NƠI HIỂN THỊ DANH SÁCH THỂ TRỰC TIẾP PHẲNG -->
+    <div class="schedule-list-grid" id="schedule-container"></div>
+</div>
 
-    <script>
-        // Biến kiểm soát trạng thái đăng nhập quyền sửa lịch
-        let isAdminUnlocked = false;
-        // BẠN CÓ THỂ THAY ĐỔI MẬT KHẨU Ở ĐÂY
-        const ADMIN_PASSWORD = "123456"; 
+<script>
+    let isAdminUnlocked = false;
+    const ADMIN_PASSWORD = "123456"; 
 
-        // MẢNG GIÁO VIÊN
-        const danhSachGiaoVien = [
-            { name: " cô Phương", phone: "0901234567" },
-            { name: "Lê Thu Hà ", phone: "0911222333" },
-            { name: "Hồng Hạnh", phone: "0988777666" },
-            { name: "P.Thanh", phone: "0901234567" },
-            { name: "Thanh Thảo", phone: "0911222333" },
-            { name: "Hà An", phone: "0988777666" },
-            { name: "Mai Ly", phone: "0901234567" },
-            { name: "Phương galaxy", phone: "0911222333" },
-            { name: "Thu Phương quest", phone: "0988777666" },
-            { name: "Ngô Hằng", phone: "0901234567" },
-            { name: "Thu Hà 96", phone: "0911222333" },
-            { name: "Tân", phone: "0988777666" },
-            { name: "Trà My", phone: "0901234567" },
-            { name: "Hà Linh", phone: "0911222333" },
-            { name: "Tuệ Minh", phone: "0988777666" },
-            { name: "Mạnh Toàn", phone: "0911222333" },
-            { name: "Nhung", phone: "0988777666" },
-            { name: "Minh Phương", phone: "0911222333" }
-        ];
+    const danhSachGiaoVien = [
+        { name: " cô Phương", phone: "0901234567" },
+        { name: "Lê Thu Hà ", phone: "0911222333" },
+        { name: "Hồng Hạnh", phone: "0988777666" },
+        { name: "P.Thanh", phone: "0901234567" },
+        { name: "Thanh Thảo", phone: "0911222333" },
+        { name: "Hà An", phone: "0988777666" },
+        { name: "Mai Ly", phone: "0901234567" },
+        { name: "Phương galaxy", phone: "0911222333" },
+        { name: "Thu Phương quest", phone: "0988777666" },
+        { name: "Ngô Hằng", phone: "0901234567" },
+        { name: "Thu Hà 96", phone: "0911222333" },
+        { name: "Tân", phone: "0988777666" },
+        { name: "Trà My", phone: "0901234567" },
+        { name: "Hà Linh", phone: "0911222333" },
+        { name: "Tuệ Minh", phone: "0988777666" },
+        { name: "Mạnh Toàn", phone: "0911222333" },
+        { name: "Nhung", phone: "0988777666" },
+        { name: "Minh Phương", phone: "0911222333" }
+    ];
 
-        // DANH SÁCH LỚP HỌC
-        const danhSachLop = [
-            { name: "Skykid", link: "https://hatbui10.github.io/skykid/" },
-            { name: "Smartkid", link: "https://hatbui10.github.io/smartkid/" },
-            { name: "Cloudkid", link: "https://hatbui10.github.io/cloudkid/" },
-            { name: "Ozon", link: "https://hatbui10.github.io/ozon/" },
-            { name: "Mickey", link: "https://hatbui10.github.io/mickey/" },
-            { name: "Oxford4a", link: "https://hatbui10.github.io/oxford4a/" },
-            { name: "Quest4", link: "https://hatbui10.github.io/quest/" },
-            { name: "Cambridge", link: "https://hatbui10.github.io/cambridge/" },
-            { name: "King", link: "https://hatbui10.github.io/king/" },
-            { name: "Galaxy", link: "https://hatbui10.github.io/galaxy/" },
-            { name: "Kind5", link: "https://hatbui10.github.io/kind5/" },
-            { name: "Like5", link: "https://hatbui10.github.io/like5/" },
-            { name: "Apolo", link: "https://hatbui10.github.io/apolo/" },
-            { name: "Smile6", link: "https://hatbui10.github.io/smile6/" },
-            { name: "Evic6", link: "https://hatbui10.github.io/evic6/" },
-            { name: "Paris6", link: "https://hatbui10.github.io/paris6/" },
-            { name: "Mar6", link: "https://hatbui10.github.io/mar6/" },
-            { name: "Good6", link: "https://hatbui10.github.io/good6/" },
-            { name: "Star6", link: "https://hatbui10.github.io/star6/" },
-            { name: "Ila7", link: "https://hatbui10.github.io/ila7/" },
-            { name: "Moon7", link: "https://hatbui10.github.io/moon7/" },
-            { name: "Delta7", link: "https://hatbui10.github.io/delta7/" },
-            { name: "Kid7", link: "https://hatbui10.github.io/kid7/" },
-            { name: "Bossvip", link: "https://hatbui10.github.io/bossvip/" },
-            { name: "Happy8", link: "https://hatbui10.github.io/happy8/" },
-            { name: "High8", link: "https://hatbui10.github.io/high8/" },
-            { name: "Hope8", link: "https://hatbui10.github.io/hope8/" },
-            { name: "Sun8", link: "https://hatbui10.github.io/sun8/" },
-            { name: "Supervip", link: "https://hatbui10.github.io/supervip/" },
-            { name: "Sea9", link: "https://hatbui10.github.io/sea9/" },
-            { name: "Big9", link: "https://hatbui10.github.io/big9/" },
-            { name: "Clc9", link: "https://hatbui10.github.io/clc9/" },
-            { name: "Super9", link: "https://hatbui10.github.io/super9/" },
-            { name: "Cloud10", link: "https://hatbui10.github.io/cloud10/" },
-            { name: "Win10", link: "https://hatbui10.github.io/win10/" },
-            { name: "Try10", link: "https://hatbui10.github.io/try10/" },
-            { name: "Can11", link: "https://hatbui10.github.io/can11/" },
-            { name: "Ocean11", link: "https://hatbui10.github.io/ocean11/" },
-            { name: "Ielt Wonderful 12", link: "https://hatbui10.github.io/ieltwonderful12/" },
-            { name: "Athena12", link: "https://hatbui10.github.io/athena12/" }
-        ];
+    const danhSachLop = [
+        { name: "Skykid", link: "https://hatbui10.github.io/skykid/" },
+        { name: "Smartkid", link: "https://hatbui10.github.io/smartkid/" },
+        { name: "Cloudkid", link: "https://hatbui10.github.io/cloudkid/" },
+        { name: "Ozon", link: "https://hatbui10.github.io/ozon/" },
+        { name: "Mickey", link: "https://hatbui10.github.io/mickey/" },
+        { name: "Oxford4a", link: "https://hatbui10.github.io/oxford4a/" },
+        { name: "Quest4", link: "https://hatbui10.github.io/quest/" },
+        { name: "Cambridge", link: "https://hatbui10.github.io/cambridge/" },
+        { name: "King", link: "https://hatbui10.github.io/king/" },
+        { name: "Galaxy", link: "https://hatbui10.github.io/galaxy/" },
+        { name: "Kind5", link: "https://hatbui10.github.io/kind5/" },
+        { name: "Like5", link: "https://hatbui10.github.io/like5/" },
+        { name: "Apolo", link: "https://hatbui10.github.io/apolo/" },
+        { name: "Smile6", link: "https://hatbui10.github.io/smile6/" },
+        { name: "Evic6", link: "https://hatbui10.github.io/evic6/" },
+        { name: "Paris6", link: "https://hatbui10.github.io/paris6/" },
+        { name: "Mar6", link: "https://hatbui10.github.io/mar6/" },
+        { name: "Good6", link: "https://hatbui10.github.io/good6/" },
+        { name: "Star6", link: "https://hatbui10.github.io/star6/" },
+        { name: "Ila7", link: "https://hatbui10.github.io/ila7/" },
+        { name: "Moon7", link: "https://hatbui10.github.io/moon7/" },
+        { name: "Delta7", link: "https://hatbui10.github.io/delta7/" },
+        { name: "Kid7", link: "https://hatbui10.github.io/kid7/" },
+        { name: "Bossvip", link: "https://hatbui10.github.io/bossvip/" },
+        { name: "Happy8", link: "https://hatbui10.github.io/happy8/" },
+        { name: "High8", link: "https://hatbui10.github.io/high8/" },
+        { name: "Hope8", link: "https://hatbui10.github.io/hope8/" },
+        { name: "Sun8", link: "https://hatbui10.github.io/sun8/" },
+        { name: "Supervip", link: "https://hatbui10.github.io/supervip/" },
+        { name: "Sea9", link: "https://hatbui10.github.io/sea9/" },
+        { name: "Big9", link: "https://hatbui10.github.io/big9/" },
+        { name: "Clc9", link: "https://hatbui10.github.io/clc9/" },
+        { name: "Super9", link: "https://hatbui10.github.io/super9/" },
+        { name: "Cloud10", link: "https://hatbui10.github.io/cloud10/" },
+        { name: "Win10", link: "https://hatbui10.github.io/win10/" },
+        { name: "Try10", link: "https://hatbui10.github.io/try10/" },
+        { name: "Can11", link: "https://hatbui10.github.io/can11/" },
+        { name: "Ocean11", link: "https://hatbui10.github.io/ocean11/" },
+        { name: "Ielt Wonderful 12", link: "https://hatbui10.github.io/ieltwonderful12/" },
+        { name: "Athena12", link: "https://hatbui10.github.io/athena12/" }
+    ];
 
-        const cauTrucToaNha = { "30": 3, "58": 3, "158": 4, "237": 6 };
-        const defaultSchedule = { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] };
-        let lichHocToanTruong = JSON.parse(localStorage.getItem('lichHocTang_V4')) || defaultSchedule;
-        let currentDay = 'thu2';
+    const defaultSchedule = { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] };
+    let lichHocToanTruong = JSON.parse(localStorage.getItem('lichHocTang_V4')) || defaultSchedule;
+    let currentDay = 'thu2';
 
-        // Hàm kiểm tra mật khẩu để mở bộ công cụ quản lý và các nút xóa lịch
-        function checkAdminPassword() {
-            if (isAdminUnlocked) {
-                // Nếu đang mở, click lại sẽ đóng bảng quản lý (Log out)
-                isAdminUnlocked = false;
-                document.getElementById('admin-panel-box').style.display = 'none';
-                document.getElementById('trigger-auth-btn').innerText = '🔐 Nhập mật khẩu quản trị để xếp/sửa lịch';
-                renderBuildingMap(currentDay);
-                return;
+    function checkAdminPassword() {
+        if (isAdminUnlocked) {
+            isAdminUnlocked = false;
+            document.getElementById('admin-panel-box').style.display = 'none';
+            document.getElementById('trigger-auth-btn').innerText = '🔐 Nhập mật khẩu quản trị để xếp/sửa lịch';
+            renderScheduleList(currentDay);
+            return;
+        }
+
+        const inputPass = prompt("Vui lòng nhập mật khẩu quản lý để sửa đổi lịch học:");
+        if (inputPass === ADMIN_PASSWORD) {
+            isAdminUnlocked = true;
+            document.getElementById('admin-panel-box').style.display = 'block';
+            document.getElementById('trigger-auth-btn').innerText = '🔒 Khóa chế độ sửa lịch';
+            renderScheduleList(currentDay);
+        } else if (inputPass !== null) {
+            alert("Mật khẩu không chính xác! Bạn không có quyền sửa lịch học.");
+        }
+    }
+
+    function initDropdowns() {
+        const classSelect = document.getElementById('select-class');
+        const teacherSelect = document.getElementById('select-teacher');
+
+        classSelect.innerHTML = '';
+        danhSachLop.forEach((lop, index) => { 
+            classSelect.innerHTML += `<option value="${index}">${lop.name}</option>`; 
+        });
+        
+        teacherSelect.innerHTML = '';
+        danhSachGiaoVien.forEach(gv => {
+            teacherSelect.innerHTML += `<option value="${gv.name}" data-phone="${gv.phone}">${gv.name}</option>`;
+        });
+    }
+
+    // HÀM RENDER ĐÃ BỎ HOÀN TOÀN KHỐI TOÀ NHÀ TRUNG GIAN
+    function renderScheduleList(day) {
+        const container = document.getElementById('schedule-container');
+        container.innerHTML = '';
+
+        const listClasses = lichHocToanTruong[day] || [];
+
+        if (listClasses.length === 0) {
+            container.innerHTML = `<div class="empty-schedule">Không có lịch học nào được xếp trong ngày này.</div>`;
+            return;
+        }
+
+        // Duyệt trực tiếp qua mảng và render thẳng ra danh sách thẻ lớp học
+        listClasses.forEach((item, index) => {
+            const phoneDisplay = item.gvPhone ? item.gvPhone.replace(/(\d{4})(\d{3})(\d{3})/, "$1.$2.$3") : "";
+            
+            let targetLink = item.lopLink;
+            if (!targetLink) {
+                const found = danhSachLop.find(l => l.name === item.lopName);
+                targetLink = found ? found.link : "#";
             }
 
-            const inputPass = prompt("Vui lòng nhập mật khẩu quản lý để sửa đổi lịch học:");
-            if (inputPass === ADMIN_PASSWORD) {
-                isAdminUnlocked = true;
-                document.getElementById('admin-panel-box').style.display = 'block'; // Hiện form chỉnh sửa
-                document.getElementById('trigger-auth-btn').innerText = '🔒 Khóa chế độ sửa lịch';
-                renderBuildingMap(currentDay); // Render lại để hiển thị các nút Xóa (nút ✕)
-            } else if (inputPass !== null) {
-                alert("Mật khẩu không chính xác! Bạn không có quyền sửa lịch học.");
-            }
-        }
+            const deleteBtnStyle = isAdminUnlocked ? "display: flex;" : "display: none;";
 
-        function initDropdowns() {
-            const classSelect = document.getElementById('select-class');
-            const teacherSelect = document.getElementById('select-teacher');
+            container.innerHTML += `
+                <div class="class-card">
+                    <button class="btn-delete" style="${deleteBtnStyle}" title="Xóa lịch" onclick="deleteCard('${day}', ${index})">✕</button>
+                    
+                    <!-- 1. TÊN LỚP -->
+                    <div class="class-name-container">
+                        <a href="${targetLink}" target="_blank" class="class-name">${item.lopName}</a>
+                    </div>
+                    
+                    <!-- 2. PHÒNG HỌC -->
+                    <div class="info-row">
+                        <div class="info-left-group">
+                            <span class="info-label">Phòng học:</span>
+                            <span class="info-value"> Tầng ${item.floor} - Nhà ${item.building}</span>
+                        </div>
+                        <span style="font-size: 11px; color: #64748b; background: #273549; padding: 2px 6px; border-radius: 4px;" hidden>👥 Sĩ số: ${item.studentSize}</span>
+                    </div>
+                        <!-- 3. GIÁO VIÊN + NÚT GỌI -->
+                    <div class="info-row">
+                        <div class="info-left-group">
+                            <span class="info-label">Giáo viên:</span>
+                            <span class="info-value">${item.gvName}</span>
+                        </div>
+                        <a href="tel:${item.gvPhone}" class="btn-call-prominent">📞 Gọi</a>
+                    </div>
+                    
+                    <!-- 4. THỜI GIAN HỌC -->
+                    <div class="info-row">
+                        <div class="info-left-group">
+                            <span class="info-label">Thời gian:</span>
+                            <span class="info-value info-time">${item.time}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
 
-            classSelect.innerHTML = '';
-            danhSachLop.forEach((lop, index) => { 
-                classSelect.innerHTML += `<option value="${index}">${lop.name}</option>`; 
-            });
-            
-            teacherSelect.innerHTML = '';
-            danhSachGiaoVien.forEach(gv => {
-                teacherSelect.innerHTML += `<option value="${gv.name}" data-phone="${gv.phone}">${gv.name}</option>`;
-            });
-        }
+    function addSchedule() {
+        if (!isAdminUnlocked) return alert("Bạn cần đăng nhập bằng mật khẩu trước!");
+        
+        const targetDay = document.getElementById('select-day').value;
+        const time = document.getElementById('select-time').value;
+        const lopIndex = document.getElementById('select-class').value;
+        const lopName = danhSachLop[lopIndex].name;
+        const lopLink = danhSachLop[lopIndex].link;
+        const studentSize = document.getElementById('input-size').value || "0";
+        const teacherSelect = document.getElementById('select-teacher');
+        const gvName = teacherSelect.value;
+        const gvPhone = teacherSelect.options[teacherSelect.selectedIndex].getAttribute('data-phone');
+        
+        const buildingValue = document.getElementById('select-building').value; 
+        const parts = buildingValue.split('-'); 
+        
+        const floor = parts[0].replace('T', ''); 
+        const building = parts[1]; 
 
-        function renderBuildingMap(day) {
-            const container = document.getElementById('building-container');
-            container.innerHTML = '';
+        lichHocToanTruong[targetDay].push({ time, lopName, lopLink, studentSize, gvName, gvPhone, building, floor });
+        localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
+        renderScheduleList(currentDay);
+        alert("Đã xếp lịch thành công!");
+    }
 
-            const listClasses = lichHocToanTruong[day] || [];
-
-            Object.keys(cauTrucToaNha).forEach(toa => {
-                let buildingHTML = `
-                    <div class="building-block">
-                        <div class="building-header"><span class="dot dot-${toa}"></span> NHÀ ${toa}</div>
-                `;
-
-                const tongSoTang = cauTrucToaNha[toa];
-                for (let tang = tongSoTang; tang >= 1; tang--) {
-                    buildingHTML += `
-                        <div class="floor-row">
-                            <div class="floor-label">Tầng ${tang}</div>
-                            <div class="floor-classes" id="classes-${toa}-${tang}">
-                    `;
-
-                    const lopTrongTang = listClasses.filter(c => c.building === toa && parseInt(c.floor) === tang);
-
-                    if (lopTrongTang.length === 0) {
-                        buildingHTML += `<span class="empty-floor">Trống lịch học...</span>`;
-                    } else {
-                        lopTrongTang.forEach(item => {
-                            const originIndex = listClasses.findIndex(c => c === item);
-                            const phoneDisplay = item.gvPhone ? item.gvPhone.replace(/(\d{4})(\d{3})(\d{3})/, "$1.$2.$3") : "";
-                            
-                            let targetLink = item.lopLink;
-                            if (!targetLink) {
-                                const found = danhSachLop.find(l => l.name === item.lopName);
-                                targetLink = found ? found.link : "#";
-                            }
-
-                            // Quản lý hiển thị nút xóa (✕) dựa trên biến kiểm tra đăng nhập mật khẩu
-                            const deleteBtnStyle = isAdminUnlocked ? "display: flex;" : "display: none;";
-
-                            buildingHTML += `
-                                <div class="class-card">
-                                    <button class="btn-delete" style="${deleteBtnStyle}" title="Xóa lịch" onclick="deleteCard('${day}', ${originIndex})">✕</button>
-                                    
-                                    <div class="card-row-top">
-                                        <div class="card-time">⏱ Ca: ${item.time}</div>
-                                        <span class="badge-student">👥 Sĩ số: ${item.studentSize}</span>
-                                    </div>
-                                    
-                                    <a href="${targetLink}" target="_blank" class="card-title-link">${item.lopName}</a>
-                                    
-                                    <div class="teacher-row">
-                                        <span>👤 GV: ${item.gvName}</span>
-                                        <a href="tel:${item.gvPhone}" class="btn-call-prominent">📞 Gọi ngay: ${phoneDisplay}</a>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-
-                    buildingHTML += `</div></div>`;
-                }
-
-                buildingHTML += `</div>`;
-                container.innerHTML += buildingHTML;
-            });
-        }
-
-        function addSchedule() {
-            if (!isAdminUnlocked) return alert("Bạn cần đăng nhập bằng mật khẩu trước!");
-            
-            const targetDay = document.getElementById('select-day').value;
-            const time = document.getElementById('select-time').value;
-            const lopIndex = document.getElementById('select-class').value;
-            const lopName = danhSachLop[lopIndex].name;
-            const lopLink = danhSachLop[lopIndex].link;
-            const studentSize = document.getElementById('input-size').value || "0";
-            const teacherSelect = document.getElementById('select-teacher');
-            const gvName = teacherSelect.value;
-            const gvPhone = teacherSelect.options[teacherSelect.selectedIndex].getAttribute('data-phone');
-            
-            const buildingValue = document.getElementById('select-building').value; 
-            const parts = buildingValue.split('-'); 
-            
-            const floor = parts[0].replace('T', ''); 
-            const building = parts[1]; 
-
-            lichHocToanTruong[targetDay].push({ time, lopName, lopLink, studentSize, gvName, gvPhone, building, floor });
+    function deleteCard(day, index) {
+        if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
+        if (confirm("Bạn muốn xóa lớp học này?")) {
+            lichHocToanTruong[day].splice(index, 1);
             localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
-            renderBuildingMap(currentDay);
-            alert("Đã xếp lịch thành công!");
+            renderScheduleList(day);
         }
+    }
 
-        function deleteCard(day, index) {
-            if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
-            if (confirm("Bạn muốn xóa lớp học này?")) {
-                lichHocToanTruong[day].splice(index, 1);
-                localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
-                renderBuildingMap(day);
-            }
+    function clearCurrentDaySchedule() {
+        if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
+        const dayText = document.querySelector('.tab-btn.active').innerText;
+        if (confirm(`Bạn có chắc chắn muốn xóa lịch của ${dayText}?`)) {
+            lichHocToanTruong[currentDay] = [];
+            localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
+            renderScheduleList(currentDay);
         }
+    }
 
-        function clearCurrentDaySchedule() {
-            if (!isAdminUnlocked) return alert("Bạn không có quyền thực hiện chức năng này!");
-            const dayText = document.querySelector('.tab-btn.active').innerText;
-            if (confirm(`Bạn có chắc chắn muốn xóa lịch của ${dayText}?`)) {
-                lichHocToanTruong[currentDay] = [];
-                localStorage.setItem('lichHocTang_V4', JSON.stringify(lichHocToanTruong));
-                renderBuildingMap(currentDay);
-            }
-        }
+    function changeDay(dayId, buttonEl) {
+        currentDay = dayId;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        buttonEl.classList.add('active');
+        renderScheduleList(dayId);
+    }
 
-        function changeDay(dayId, buttonEl) {
-            currentDay = dayId;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            buttonEl.classList.add('active');
-            renderBuildingMap(dayId);
-        }
-
-        window.onload = function() {
-            initDropdowns();
-            renderBuildingMap('thu2');
-        };
-    </script>
+    window.onload = function() {
+        initDropdowns();
+        renderScheduleList('thu2');
+    };
+</script>
 </body>
 </html>
